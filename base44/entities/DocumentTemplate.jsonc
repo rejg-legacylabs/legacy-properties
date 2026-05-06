@@ -1,0 +1,72 @@
+{
+  "name": "DocumentTemplate",
+  "type": "object",
+  "description": "A Google Drive template (Doc/Sheet) registered for merge-tag substitution by generateDocumentFromTemplate.",
+  "properties": {
+    "template_name": {
+      "type": "string",
+      "title": "Template Name"
+    },
+    "document_type": {
+      "type": "string",
+      "enum": [
+        "lease",
+        "move_in_inspection",
+        "move_out_inspection",
+        "rent_increase_notice",
+        "non_renewal_notice",
+        "guest_register",
+        "maintenance_request",
+        "other"
+      ],
+      "title": "Document Type"
+    },
+    "drive_template_id": {
+      "type": "string",
+      "title": "Drive Template File ID"
+    },
+    "drive_template_url": {
+      "type": "string",
+      "title": "Drive Template URL"
+    },
+    "mapping_json": {
+      "type": "string",
+      "title": "Mapping (JSON)",
+      "description": "JSON mapping merge tags ({{resident_name}}, etc.) to entity field paths"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "title": "Enabled"
+    }
+  },
+  "required": ["template_name", "document_type", "drive_template_id"],
+  "rls": {
+    "create": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "read": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
+      ]
+    },
+    "update": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "delete": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    }
+  }
+}

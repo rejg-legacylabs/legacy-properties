@@ -11,6 +11,20 @@
       "type": "string",
       "title": "Resident Name"
     },
+    "pathways_global_resident_id": {
+      "type": "string",
+      "title": "Pathways Global Resident ID"
+    },
+    "pathways_placement_id": {
+      "type": "string",
+      "title": "Pathways Placement ID",
+      "description": "ID assigned by Pathways for this placement (set after first successful outbound notify)"
+    },
+    "last_synced_to_pathways_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced To Pathways At"
+    },
     "property_id": {
       "type": "string",
       "title": "Property ID"
@@ -98,83 +112,31 @@
   "rls": {
     "create": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
       ]
     },
     "read": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
       ]
     },
     "update": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}}
       ]
     },
     "delete": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
       ]
     }
   }

@@ -1,0 +1,73 @@
+{
+  "name": "IncomingReferralEvent",
+  "type": "object",
+  "description": "Raw inbound referral event log for idempotency + replay. One row per inbound webhook hit (pathways, partner, walk_in).",
+  "properties": {
+    "source_app": {
+      "type": "string",
+      "enum": ["pathways", "partner", "walk_in"],
+      "title": "Source App"
+    },
+    "external_referral_id": {
+      "type": "string",
+      "title": "External Referral ID",
+      "description": "For source=pathways, this is the Pathways global_resident_id"
+    },
+    "payload": {
+      "type": "string",
+      "title": "Payload (JSON)"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "title": "Idempotency Key"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["received", "processed", "duplicate", "error"],
+      "default": "received",
+      "title": "Status"
+    },
+    "processed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Processed At"
+    },
+    "resulting_referral_id": {
+      "type": "string",
+      "title": "Resulting Referral ID"
+    },
+    "error": {
+      "type": "string",
+      "title": "Error"
+    }
+  },
+  "required": ["source_app", "idempotency_key", "status"],
+  "indexes": [
+    {"fields": ["idempotency_key"], "unique": true},
+    {"fields": ["external_referral_id"]}
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "read": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}}
+      ]
+    },
+    "update": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "delete": {
+      "user_condition": {"role": "admin"}
+    }
+  }
+}

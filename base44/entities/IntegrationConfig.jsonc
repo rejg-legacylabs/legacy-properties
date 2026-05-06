@@ -1,0 +1,69 @@
+{
+  "name": "IntegrationConfig",
+  "type": "object",
+  "description": "Configuration row per peer app (pathways, mrt, drive, governance). Lets ops toggle integrations and rotate URLs without redeploys.",
+  "properties": {
+    "app_name": {
+      "type": "string",
+      "enum": ["pathways", "mrt", "drive", "governance"],
+      "title": "App Name"
+    },
+    "base_url": {
+      "type": "string",
+      "title": "Base URL",
+      "description": "Root URL for the peer app's function endpoints"
+    },
+    "shared_secret_env_var_name": {
+      "type": "string",
+      "title": "Shared Secret Env Var Name",
+      "description": "Name of the Deno env variable that holds the outbound shared secret (e.g. PATHWAYS_OUTBOUND_SECRET)"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "title": "Enabled"
+    },
+    "last_health_check": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Health Check"
+    },
+    "last_health_status": {
+      "type": "string",
+      "enum": ["healthy", "degraded", "down", "unknown"],
+      "default": "unknown",
+      "title": "Last Health Status"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": ["app_name", "enabled"],
+  "indexes": [
+    {"fields": ["app_name"], "unique": true}
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "read": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "update": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "delete": {
+      "user_condition": {"role": "admin"}
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "name": "OutboundIntegrationQueue",
+  "type": "object",
+  "description": "Durable queue for outbound integration calls (Pathways, MRT, Drive, Governance). Failed deliveries are retried by retryFailedIntegrations.",
+  "properties": {
+    "target_app": {
+      "type": "string",
+      "enum": ["pathways", "mrt", "drive", "governance"],
+      "title": "Target App"
+    },
+    "endpoint_path": {
+      "type": "string",
+      "title": "Endpoint Path",
+      "description": "Function name or relative path on the target app (e.g. receiveHousingPlacementUpdate)"
+    },
+    "payload": {
+      "type": "string",
+      "title": "Payload (JSON)",
+      "description": "Serialized JSON body that will be POSTed to the target endpoint"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "in_flight", "succeeded", "failed", "dead_letter"],
+      "default": "pending",
+      "title": "Status"
+    },
+    "attempts": {
+      "type": "number",
+      "default": 0,
+      "title": "Attempts"
+    },
+    "last_attempt_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Attempt At"
+    },
+    "last_error": {
+      "type": "string",
+      "title": "Last Error"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "title": "Idempotency Key",
+      "description": "Must be unique. Prevents duplicate outbound delivery on retry."
+    },
+    "global_resident_id": {
+      "type": "string",
+      "title": "Global Resident ID",
+      "description": "Optional. Indexed for resident-scoped queue inspection."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+    },
+    "succeeded_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Succeeded At"
+    }
+  },
+  "required": ["target_app", "endpoint_path", "payload", "status", "idempotency_key"],
+  "indexes": [
+    {"fields": ["idempotency_key"], "unique": true},
+    {"fields": ["global_resident_id"]},
+    {"fields": ["status", "target_app"]}
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "read": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "update": {
+      "$or": [
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}}
+      ]
+    },
+    "delete": {
+      "user_condition": {"role": "admin"}
+    }
+  }
+}

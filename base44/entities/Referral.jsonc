@@ -6,6 +6,22 @@
       "type": "string",
       "title": "External Referral ID"
     },
+    "source_app": {
+      "type": "string",
+      "enum": ["internal", "pathways", "partner", "walk_in", "other"],
+      "default": "internal",
+      "title": "Source App"
+    },
+    "pathways_global_resident_id": {
+      "type": "string",
+      "title": "Pathways Global Resident ID",
+      "description": "Mirror of external_referral_id when source_app=pathways. Kept as a clearly named field for cross-app joins."
+    },
+    "last_synced_to_pathways_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced To Pathways At"
+    },
     "referring_organization_id": {
       "type": "string",
       "title": "Referring Organization ID"

@@ -11,6 +11,22 @@
       "title": "External Referral ID",
       "description": "ID used for syncing with external systems such as Pathways Hub"
     },
+    "pathways_global_resident_id": {
+      "type": "string",
+      "title": "Pathways Global Resident ID",
+      "description": "The canonical resident id from Pathways. Mirrors external_referral_id when source is pathways."
+    },
+    "last_synced_to_pathways_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced To Pathways At"
+    },
+    "sync_status_pathways": {
+      "type": "string",
+      "enum": ["never", "pending", "synced", "failed", "disabled"],
+      "default": "never",
+      "title": "Sync Status (Pathways)"
+    },
     "first_name": {
       "type": "string",
       "title": "First Name"
@@ -99,84 +115,32 @@
   "rls": {
     "create": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
       ]
     },
     "read": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
       ]
     },
     "update": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "created_by": "{{user.email}}"
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"created_by": "{{user.email}}"}
       ]
     },
     "delete": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "created_by": "{{user.email}}"
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"created_by": "{{user.email}}"}
       ]
     }
   }

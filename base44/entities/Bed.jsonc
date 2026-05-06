@@ -65,6 +65,17 @@
       "format": "date-time",
       "title": "Cleaning Started At"
     },
+    "last_synced_to_pathways_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last Synced To Pathways At"
+    },
+    "sync_status_pathways": {
+      "type": "string",
+      "enum": ["never", "pending", "synced", "failed", "disabled"],
+      "default": "never",
+      "title": "Sync Status (Pathways)"
+    },
     "notes": {
       "type": "string",
       "title": "Notes"
@@ -80,100 +91,38 @@
   "rls": {
     "create": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}}
       ]
     },
     "read": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        },
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}},
         {
           "$and": [
-            {
-              "user_condition": {
-                "role": "referral_partner"
-              }
-            },
-            {
-              "data.bed_status": "available"
-            }
+            {"user_condition": {"role": "referral_partner"}},
+            {"data.bed_status": "available"}
           ]
         }
       ]
     },
     "update": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_staff"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}},
+        {"user_condition": {"role": "housing_staff"}}
       ]
     },
     "delete": {
       "$or": [
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_admin"
-          }
-        },
-        {
-          "user_condition": {
-            "role": "housing_manager"
-          }
-        }
+        {"user_condition": {"role": "admin"}},
+        {"user_condition": {"role": "housing_admin"}},
+        {"user_condition": {"role": "housing_manager"}}
       ]
     }
   }

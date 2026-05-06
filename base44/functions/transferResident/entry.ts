@@ -98,11 +98,13 @@ Deno.serve(async (req) => {
     });
 
     // Update Placement record
+    let updatedPlacementId = '';
     const placements = await base44.entities.Placement.filter({
       resident_id,
       placement_status: 'active',
     });
     if (placements.length > 0) {
+      updatedPlacementId = placements[0].id;
       await base44.entities.Placement.update(placements[0].id, {
         property_id: to_property_id,
         property_name: to_property_name,
@@ -124,6 +126,45 @@ Deno.serve(async (req) => {
         bed_label: to_bed_label,
       });
     }
+
+    // ── Pathways notification (fire-and-forget; never throws) ────────────
+    (async () => {
+      try {
+        let global_resident_id = '';
+        try {
+          const r = await base44.asServiceRole.entities.HousingResident.get(resident_id);
+          global_resident_id = r?.pathways_global_resident_id || r?.external_referral_id || '';
+        } catch (_e) { /* skip */ }
+
+        const base = req.url.split('/functions/')[0];
+        await fetch(`${base}/functions/notifyPathwaysOfPlacement`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            global_resident_id,
+            placement_id: updatedPlacementId,
+            bed_id: to_bed_id,
+            property_name: to_property_name,
+            status: 'transferred',
+            effective_date: transfer_date,
+            idempotency_key: `transfer-${transfer.id}`,
+          }),
+        });
+      } catch (notifyErr) {
+        try {
+          await base44.asServiceRole.entities.AuditLog.create({
+            event_type: 'pathways_notify_dispatch_failed',
+            status: 'warning',
+            source_function: 'transferResident',
+            related_entity: 'RoomTransfer',
+            related_entity_id: transfer.id,
+            message: `notifyPathwaysOfPlacement dispatch failed (transfer still completed): ${notifyErr.message}`,
+            details: JSON.stringify({ error: notifyErr.message }),
+            notified_admin: false,
+          });
+        } catch (_inner) { /* swallow */ }
+      }
+    })();
 
     return Response.json({
       success: true,

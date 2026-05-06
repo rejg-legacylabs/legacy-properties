@@ -87,7 +87,7 @@ Deno.serve(async (req) => {
       occupancy_status: 'active',
     });
 
-    // ── Pathways Hub Webhook ──────────────────────────────────────────────────
+    // ── Pathways Hub Webhook (legacy direct webhook) ──────────────────────────
     // Fire-and-forget: webhook failure must NEVER fail the bed assignment
     (async () => {
       const PATHWAYS_WEBHOOK_URL = 'https://api.base44.com/api/apps/69da82da88110c360468da13/functions/legacyBedAssignedWebhook';
@@ -115,7 +115,6 @@ Deno.serve(async (req) => {
           throw new Error(`Webhook responded with ${webhookRes.status}: ${errBody}`);
         }
 
-        // Log success
         await base44.asServiceRole.entities.AuditLog.create({
           event_type: 'pathways_webhook_fired',
           status: 'success',
@@ -128,7 +127,6 @@ Deno.serve(async (req) => {
         });
 
       } catch (webhookErr) {
-        // Log failure and notify admin via email — bed assignment already succeeded
         const errorDetails = JSON.stringify({
           error: webhookErr.message,
           resident_id,
@@ -148,7 +146,6 @@ Deno.serve(async (req) => {
           notified_admin: true,
         });
 
-        // Alert admin users via email
         try {
           const adminUsers = await base44.asServiceRole.entities.User.filter({ role: 'admin' });
           for (const admin of adminUsers) {
@@ -161,12 +158,31 @@ Deno.serve(async (req) => {
             }
           }
         } catch (emailErr) {
-          // Email failure is silent — AuditLog record already captures the webhook failure
           console.error('Admin email notification failed:', emailErr.message);
         }
       }
     })();
     // ── End Pathways Hub Webhook ──────────────────────────────────────────────
+
+    // ── New unified outbound (queued/retry-aware) — fire-and-forget ───────────
+    (async () => {
+      try {
+        const base = req.url.split('/functions/')[0];
+        await fetch(`${base}/functions/notifyPathwaysOfPlacement`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            global_resident_id: resident.pathways_global_resident_id || resident.external_referral_id || '',
+            placement_id: '',
+            bed_id,
+            property_name: property?.property_name || '',
+            status: 'active',
+            effective_date: today,
+            idempotency_key: `assign-${resident_id}-${bed_id}-${today}`,
+          }),
+        });
+      } catch (_e) { /* queued by callee — never throws */ }
+    })();
 
     return Response.json({ success: true, message: `${resident.first_name} ${resident.last_name} assigned to ${bed.bed_label}` });
   } catch (error) {

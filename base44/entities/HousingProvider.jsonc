@@ -50,5 +50,68 @@
   "required": [
     "name",
     "status"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        }
+      ]
+    }
+  }
 }

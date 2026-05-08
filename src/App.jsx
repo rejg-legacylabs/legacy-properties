@@ -37,6 +37,9 @@ import TurnkeyDashboard from './pages/TurnkeyDashboard';
 import Billing from './pages/Billing';
 import CreateInvoice from './pages/CreateInvoice';
 import RecurringRules from './pages/RecurringRules';
+import MaintenanceRequests from './pages/MaintenanceRequests';
+import LeaseManagement from './pages/LeaseManagement';
+import TenantPortal from './pages/TenantPortal';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -91,6 +94,9 @@ const AuthenticatedApp = () => {
         <Route path="/billing" element={<Billing />} />
         <Route path="/billing/create" element={<CreateInvoice />} />
         <Route path="/recurring-rules" element={<RecurringRules />} />
+        <Route path="/maintenance" element={<MaintenanceRequests />} />
+        <Route path="/lease-management" element={<LeaseManagement />} />
+        <Route path="/tenant-portal" element={<TenantPortal />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

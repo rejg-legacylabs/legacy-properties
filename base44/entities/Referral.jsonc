@@ -111,5 +111,89 @@
     "applicant_first_name",
     "applicant_last_name",
     "referral_status"
-  ]
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "referral_partner"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "data.referring_user_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "$and": [
+            {
+              "user_condition": {
+                "role": "referral_partner"
+              }
+            },
+            {
+              "data.referring_user_email": "{{user.email}}"
+            }
+          ]
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "housing_admin"
+      }
+    }
+  }
 }

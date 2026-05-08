@@ -36,5 +36,11 @@
       "title": "Pathway App User",
       "description": "Can access Pathway integration"
     }
-  }
+  },
+  "required": [
+    "referring_organization_id",
+    "referring_organization_name",
+    "department",
+    "is_pathway_user"
+  ]
 }

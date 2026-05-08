@@ -1,0 +1,206 @@
+{
+  "name": "LeaseAgreement",
+  "type": "object",
+  "properties": {
+    "resident_id": {
+      "type": "string",
+      "title": "Resident ID"
+    },
+    "resident_name": {
+      "type": "string",
+      "title": "Resident Name"
+    },
+    "resident_email": {
+      "type": "string",
+      "title": "Resident Email"
+    },
+    "property_id": {
+      "type": "string",
+      "title": "Property ID"
+    },
+    "property_name": {
+      "type": "string",
+      "title": "Property Name"
+    },
+    "room_id": {
+      "type": "string",
+      "title": "Room ID"
+    },
+    "room_name": {
+      "type": "string",
+      "title": "Room Name"
+    },
+    "bed_id": {
+      "type": "string",
+      "title": "Bed ID"
+    },
+    "bed_label": {
+      "type": "string",
+      "title": "Bed Label"
+    },
+    "lease_start_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Lease Start Date"
+    },
+    "lease_end_date": {
+      "type": "string",
+      "format": "date",
+      "title": "Lease End Date"
+    },
+    "monthly_rent": {
+      "type": "number",
+      "title": "Monthly Rent ($)"
+    },
+    "security_deposit": {
+      "type": "number",
+      "title": "Security Deposit ($)"
+    },
+    "lease_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "signed",
+        "active",
+        "expired",
+        "terminated",
+        "renewal_pending"
+      ],
+      "default": "draft",
+      "title": "Lease Status"
+    },
+    "signed_by_resident": {
+      "type": "boolean",
+      "default": false,
+      "title": "Signed by Resident"
+    },
+    "signed_by_staff": {
+      "type": "boolean",
+      "default": false,
+      "title": "Signed by Staff"
+    },
+    "resident_signed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Resident Signed At"
+    },
+    "staff_signed_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Staff Signed At"
+    },
+    "signed_by_staff_name": {
+      "type": "string",
+      "title": "Signed By (Staff)"
+    },
+    "renewal_offered": {
+      "type": "boolean",
+      "default": false,
+      "title": "Renewal Offered"
+    },
+    "renewal_deadline": {
+      "type": "string",
+      "format": "date",
+      "title": "Renewal Deadline"
+    },
+    "terms_and_conditions": {
+      "type": "string",
+      "title": "Terms & Conditions"
+    },
+    "notes": {
+      "type": "string",
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "resident_id",
+    "property_id",
+    "lease_start_date",
+    "lease_status"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "data.resident_email": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "data.resident_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        }
+      ]
+    }
+  }
+}

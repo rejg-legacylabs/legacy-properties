@@ -5,7 +5,7 @@ import {
   Home, Building2, DoorOpen, BedDouble, FileText, Users, UserCheck,
   ClipboardList, FolderOpen, AlertTriangle, ShieldCheck, DollarSign,
   Building, BarChart3, Settings, Menu, X, LogOut, ChevronRight, Zap, Grid3X3,
-  Send, LayoutGrid, Layers, Network, ArrowRightLeft, RefreshCw
+  Send, LayoutGrid, Layers, Network, ArrowRightLeft, RefreshCw, Wrench, UserCircle
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,13 @@ const internalNav = [
     ]
   },
   {
+    section: 'RESIDENT MGMT',
+    items: [
+      { label: 'Maintenance', path: '/maintenance', icon: Wrench },
+      { label: 'Lease Management', path: '/lease-management', icon: FileText },
+    ]
+  },
+  {
     section: 'INTELLIGENCE',
     items: [
       { label: 'Reporting', path: '/reporting', icon: BarChart3 },
@@ -76,6 +83,16 @@ const partnerNav = [
     items: [
       { label: 'Bed Search', path: '/bed-search', icon: LayoutGrid },
       { label: 'Availability', path: '/availability', icon: BedDouble },
+    ]
+  },
+];
+
+const tenantNav = [
+  {
+    section: 'MY PORTAL',
+    items: [
+      { label: 'My Portal', path: '/tenant-portal', icon: UserCircle },
+      { label: 'Maintenance', path: '/maintenance', icon: Wrench },
     ]
   },
 ];
@@ -104,7 +121,8 @@ export default function Layout() {
 
   // Security: only show nav items the user's role is entitled to.
   // Unknown / unauthenticated roles get an empty nav.
-  const filteredNav = isTurnkeyOperator ? turnkeyNav : (isPartner ? partnerNav : (isInternal ? internalNav : []));
+  const isTenant = user?.role === "tenant";
+  const filteredNav = isTurnkeyOperator ? turnkeyNav : (isTenant ? tenantNav : (isPartner ? partnerNav : (isInternal ? internalNav : [])));
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">

@@ -1,0 +1,205 @@
+{
+  "name": "MaintenanceRequest",
+  "type": "object",
+  "properties": {
+    "resident_id": {
+      "type": "string",
+      "title": "Resident ID"
+    },
+    "resident_name": {
+      "type": "string",
+      "title": "Resident Name"
+    },
+    "property_id": {
+      "type": "string",
+      "title": "Property ID"
+    },
+    "property_name": {
+      "type": "string",
+      "title": "Property Name"
+    },
+    "room_id": {
+      "type": "string",
+      "title": "Room ID"
+    },
+    "room_name": {
+      "type": "string",
+      "title": "Room Name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "plumbing",
+        "electrical",
+        "hvac",
+        "appliance",
+        "structural",
+        "pest_control",
+        "cleaning",
+        "security",
+        "other"
+      ],
+      "title": "Category"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "emergency"
+      ],
+      "default": "medium",
+      "title": "Priority"
+    },
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "acknowledged",
+        "in_progress",
+        "on_hold",
+        "resolved",
+        "closed"
+      ],
+      "default": "submitted",
+      "title": "Status"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "title": "Assigned To"
+    },
+    "assigned_to_email": {
+      "type": "string",
+      "title": "Assigned To Email"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Submitted At"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Resolved At"
+    },
+    "resolution_notes": {
+      "type": "string",
+      "title": "Resolution Notes"
+    },
+    "photo_url": {
+      "type": "string",
+      "title": "Photo URL"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "category",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "tenant"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        },
+        {
+          "created_by": "{{user.email}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_staff"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "housing_admin"
+          }
+        }
+      ]
+    }
+  }
+}

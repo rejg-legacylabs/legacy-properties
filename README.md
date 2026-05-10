@@ -2,12 +2,13 @@
 
 **A REJG Legacy Labs LLC product | Operated by REJG Legacy Properties LLC**
 
-The REJG Legacy Properties Housing App is the internal operations platform for REJG Legacy Properties — a drug- and alcohol-free transitional housing company serving HOH Foundation residents AND outside clients including government agencies, courts, treatment programs, and other nonprofits.
+The REJG Legacy Properties Housing App is the internal operations platform for REJG Legacy Properties — a drug- and alcohol-free transitional housing company serving HOH Foundation residents AND outside clients.
 
 ## Ownership & Licensing
-- **IP Owner:** REJG Legacy Labs LLC (subsidiary of RE Jones Global LLC)
-- **Operator:** REJG Legacy Properties LLC (subsidiary of RE Jones Global LLC)
-- **Contact:** rodney@rejonesglobal.com | 512-541-2395
+- **IP Owner:** REJG Legacy Labs LLC (rejglegacylabs@gmail.com)
+- **Operator:** REJG Legacy Properties LLC (rejglegacyproperties@gmail.com)
+- **Parent:** RE Jones Global LLC
+- **Phone:** 512-541-2395
 - **Address:** 5900 Balcones Drive, Suite 100, Austin, TX 78731
 
 ## Platform Features
@@ -37,7 +38,6 @@ npm run dev
 Set in `.env.local`:
 ```
 VITE_BASE44_APP_ID=69da82da88110c360468da13
-VITE_BASE44_APP_BASE_URL=https://legacy-properties.base44.app
 ```
 
 ---

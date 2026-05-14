@@ -80,9 +80,9 @@ export default function Dashboard() {
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-card-border rounded-lg p-8 mb-8">
-        <h1 className="text-4xl font-bold text-heading mb-2">Welcome to Legacy Properties</h1>
+        <h1 className="text-4xl font-bold text-heading mb-2">Welcome to REJG Legacy Properties</h1>
         <p className="text-body-text mb-4">Today is {today}</p>
-        <p className="text-muted-label">{properties.length} properties • {totalBeds} beds • Real-time operations</p>
+        <p className="text-muted-label">{properties.length} properties • {totalBeds} beds • 100% Drug & Alcohol Free • Real-time operations</p>
       </div>
 
       {/* Premium Stat Cards */}
@@ -95,7 +95,7 @@ export default function Dashboard() {
 
       <PremiumPageHeader
         title="Operations Overview"
-        subtitle="Monitor key metrics and property status"
+        subtitle="REJG Legacy Properties — Monitor key metrics and property status"
       />
 
       {!isInternal ? (
@@ -187,7 +187,7 @@ export default function Dashboard() {
           {isInternal && <RevenueSummaryWidget />}
 
           <div>
-            <h2 className="text-lg font-bold text-heading mb-4">PROPERTIES</h2>
+            <h2 className="text-lg font-bold text-heading mb-4">REJG LEGACY PROPERTIES — ALL HOMES</h2>
             {properties.length === 0 ? (
               <div className="bg-card rounded-lg border border-card-border p-12 text-center">
                 <p className="text-body-text">No properties configured yet.</p>
